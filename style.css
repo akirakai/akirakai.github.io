@@ -4,6 +4,7 @@ body {
 	font-weight: bold;
 	padding: 0;
 	margin: 0;
+	width: 100%;
 }
 div {
 	margin: 0;
@@ -24,16 +25,14 @@ div {
 #title .text {
 	position: absolute;
 	bottom: 20px;
-	left: 50%;
-	margin-left: -300px;
-	width: 300px;
+	left: 25%;
+	width: 50%;
 	color: white;
 }
 #content .text {
 	position: absolute;
 	top: 20px;
-	left: 50%;
-	margin-left: -300px;
-	width: 600px;
+	left: 25%;
+	width: 50%;
 	color: Coral;
 }
