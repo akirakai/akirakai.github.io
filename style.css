@@ -13,13 +13,13 @@ div {
 #title {
 	background-color: Coral;	
 	width: 100%;
-	height: 50%;
+	height: 30%;
 	position: relative;	
 }
 #content {
 	background-color: white;	
 	width: 100%;
-	height: 50%;
+	height: 70%;
 	position: relative;
 }
 #title .text {
