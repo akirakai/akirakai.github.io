@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+    <title>Happy Thx Giving Day!</title>
+    <style type="text/css">
+        body {
+            font-family: Ultra, LeagueGothicRegular, 'helvetica neue', helvetica, arial;
+            font-weight: bold;
+            text-shadow: black 3px 3px 3px;
+            background-color: LightBlue;
+        }
+        .container {
+            width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .love {
+            color: rgb(204, 0, 0);
+            white-space: pre;
+            font-size: 25px;
+            margin-top: 20px;
+        }
+        .hi {
+            white-space: pre;
+            font-size: 25px;
+            margin-top: -20px;
+        }
+        .divider {
+            width: 80%;
+            height: 10px;
+            background-color: black;
+            margin: 0 auto;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="jquery.funnyText.css" />
+    <script src="jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.funnyText.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.hi').funnyText({
+                activeColor: '#C00',
+                borderColor: 'while',
+                fontSize: '7em',
+                speed: 700
+            });
+            $('.love').funnyText({
+                activeColor: '#C00',
+                borderColor: 'while',
+                fontSize: '7em',
+                speed: 700
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="hi">Hi Jessica</div>
+    <!--<div class="divider"></div>-->
+    <div class="love">I love you!</div>
+</div>
+
+</body>
+</html>
