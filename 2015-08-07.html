@@ -9,10 +9,16 @@
             text-shadow: black 3px 3px 3px;
             background-color: LightBlue;
         }
-        .container {
-            width: 1000px;
-            margin: 0 auto;
+        .container {           
+            position: absolute;
             text-align: center;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate3d(-50%, -50%, 0);
+            -moz-transform: translate3d(-50%, -50%, 0);
+            -ms-transform: translate3d(-50%, -50%, 0);
+            -o-transform: translate3d(-50%, -50%, 0);
+            transform: translate3d(-50%, -50%, 0);
         }
         .love {
             color: rgb(204, 0, 0);
@@ -55,9 +61,9 @@
 </head>
 <body>
 <div class="container">
-    <div class="hi">Hi Jessica</div>
+     <div class="hi">Hi Jessica</div>
     <!--<div class="divider"></div>-->
-    <div class="love">I love you!</div>
+     <div class="love">I love you!</div>
 </div>
 
 </body>
