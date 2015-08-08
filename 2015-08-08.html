@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
     <meta name="viewport" content="initial-scale=1">
-    <title>happy birthday!</title>
+    <title>2015/08/08</title>
     <style>
         body {
             background: #39D;
@@ -13,9 +13,9 @@
         .circular-menu {
             width: 250px;
             height: 250px;
-            margin: 0 auto;
-            position: relative;
-            top: 200px;
+            position: absolute;
+            bottom: -70px;
+            left: -70px;
         }
 
         .circle {
@@ -62,19 +62,19 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            margin-top: -35px;
-            margin-left: -35px;
+            margin-top: -30px;
+            margin-left: -30px;
             text-decoration: none;
             text-align: center;
             color: #39D !important;
             border-radius: 50%;
             display: block;
-            height: 50px;
-            width: 50px;
-            line-height: 50px;
+            height: 40px;
+            width: 40px;
+            line-height: 40px;
             padding: 10px;
             background: #dde;
-            font-size: 16px;
+            font-size: 23px;
         }
 
         .menu-button:hover {
@@ -84,29 +84,26 @@
     </style>
 </head>
 <body>
-    <nav class="circular-menu">
-        <div class="circle">
-            <a href="">祝</a>
-            <a href="">你</a>
-            <a href="">生</a>
-            <a href="">日</a>
-            <a href="">快</a>
-            <a href="">乐</a>
-        </div>
-        <a href="" class="menu-button">touch!</a>
-    </nav>
-    <script>
-        var items = document.querySelectorAll('.circle a');
+<nav class="circular-menu">
+    <div class="circle">
+        <a href="">I</a>
+        <a href="">love</a>
+        <a href="">you</a>
+    </div>
+    <a href="" class="menu-button">豆</a>
+</nav>
+<script>
+    var items = document.querySelectorAll('.circle a');
 
-        for(var i = 0, l = items.length; i < l; i++) {
-            items[i].style.left = (50 - 35*Math.cos(0.5 * Math.PI + 2*(1/l)*i*Math.PI)).toFixed(4) + "%";
+    for(var i = 0, l = items.length; i < l; i++) {
+        items[i].style.left = (50 - 35*Math.cos(0.5 * Math.PI + (1/l)*i*Math.PI*4/5)).toFixed(4) + "%";
 
-            items[i].style.top = (50 - 35*Math.sin(0.5 * Math.PI + 2*(1/l)*i*Math.PI)).toFixed(4) + "%";
-        }
+        items[i].style.top = (50 - 35*Math.sin(0.5 * Math.PI + (1/l)*i*Math.PI*4/5)).toFixed(4) + "%";
+    }
 
-        document.querySelector('.menu-button').onclick = function(e) {
-            e.preventDefault(); document.querySelector('.circle').classList.toggle('open');
-        }
-    </script>
+    document.querySelector('.menu-button').onclick = function(e) {
+        e.preventDefault(); document.querySelector('.circle').classList.toggle('open');
+    }
+</script>
 </body>
 </html>

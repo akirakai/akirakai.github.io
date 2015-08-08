@@ -31,11 +31,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="happy-birthday.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="happy-birthday.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/happy-birthday.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.523614">
-              <caret line="70" column="35" selection-start-line="70" selection-start-column="35" selection-end-line="70" selection-end-column="35" />
+            <state vertical-scroll-proportion="-6.875">
+              <caret line="60" column="22" selection-start-line="60" selection-start-column="22" selection-end-line="60" selection-end-column="22" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="2015-08-08.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/2015-08-08.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.61601645">
+              <caret line="100" column="82" selection-start-line="100" selection-start-column="82" selection-end-line="100" selection-end-column="82" />
               <folding />
             </state>
           </provider>
@@ -85,8 +95,8 @@
       <list>
         <option value="$PROJECT_DIR$/2015-08-07.html" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/2015-08-08.html" />
         <option value="$PROJECT_DIR$/happy-birthday.html" />
+        <option value="$PROJECT_DIR$/2015-08-08.html" />
       </list>
     </option>
   </component>
@@ -290,8 +300,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/happy-birthday.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.523614">
-          <caret line="70" column="35" selection-start-line="70" selection-start-column="35" selection-end-line="70" selection-end-column="35" />
+        <state vertical-scroll-proportion="-6.875">
+          <caret line="60" column="22" selection-start-line="60" selection-start-column="22" selection-end-line="60" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/2015-08-08.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.61601645">
+          <caret line="100" column="82" selection-start-line="100" selection-start-column="82" selection-end-line="100" selection-end-column="82" />
           <folding />
         </state>
       </provider>
