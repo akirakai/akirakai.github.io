@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>happy birthday!</title>
+    <style>
+        /*@import "http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css";*/
+
+        body {
+            background: #39D;
+        }
+
+        .circular-menu {
+            width: 250px;
+            height: 250px;
+            margin: 0 auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate3d(-50%, -50%, 0);
+            -moz-transform: translate3d(-50%, -50%, 0);
+            -ms-transform: translate3d(-50%, -50%, 0);
+            -o-transform: translate3d(-50%, -50%, 0);
+            transform: translate3d(-50%, -50%, 0);
+        }
+
+        .circle {
+            width: 250px;
+            height: 250px;
+            opacity: 0;
+
+            -webkit-transform: scale(0);
+            -moz-transform: scale(0);
+            transform: scale(0);
+
+            -webkit-transition: all 0.4s ease-out;
+            -moz-transition: all 0.4s ease-out;
+            transition: all 0.4s ease-out;
+        }
+
+        .open.circle {
+            opacity: 1;
+
+            -webkit-transform: scale(1);
+            -moz-transform: scale(1);
+            transform: scale(1);
+        }
+
+        .circle a {
+            text-decoration: none;
+            color: white;
+            display: block;
+            height: 40px;
+            width: 40px;
+            line-height: 40px;
+            margin-left: -20px;
+            margin-top: -20px;
+            position: absolute;
+            text-align: center;
+            font-size: 25px;
+        }
+
+        .circle a:hover {
+            color: #eef;
+        }
+
+        .menu-button {
+            position: absolute;
+            top: calc(50% - 30px);
+            left: calc(50% - 30px);
+            text-decoration: none;
+            text-align: center;
+            color: #39D;
+            border-radius: 50%;
+            display: block;
+            height: 40px;
+            width: 40px;
+            line-height: 40px;
+            padding: 10px;
+            background: #dde;
+            font-size: 13px;
+        }
+
+        .menu-button:hover {
+            background-color: #eef;
+        }
+
+        /* Author stuff */
+        h1.author {
+            text-align:center;
+            color: white;
+            font-family: Helvetica, Arial, sans-serif;
+            font-weight: 300;
+        }
+
+        h1.author a {
+            color: #348;
+            text-decoration:none;
+        }
+
+        h1.author a:hover {
+            color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <nav class="circular-menu">
+        <div class="circle">
+            <a href="" class="fa fa-home fa-2x">祝</a>
+            <a href="" class="fa fa-facebook fa-2x">你</a>
+            <a href="" class="fa fa-twitter fa-2x">生</a>
+            <a href="" class="fa fa-linkedin fa-2x">日</a>
+            <a href="" class="fa fa-github fa-2x">快</a>
+            <a href="" class="fa fa-rss fa-2x">乐</a>
+        </div>
+        <a href="" class="menu-button fa fa-bars fa-2x">touch!</a>
+    </nav>
+    <script>
+        var items = document.querySelectorAll('.circle a');
+
+        for(var i = 0, l = items.length; i < l; i++) {
+            items[i].style.left = (50 - 35*Math.cos(-0.5 * Math.PI - 2*(1/l)*i*Math.PI)).toFixed(4) + "%";
+
+            items[i].style.top = (50 + 35*Math.sin(-0.5 * Math.PI - 2*(1/l)*i*Math.PI)).toFixed(4) + "%";
+        }
+
+        document.querySelector('.menu-button').onclick = function(e) {
+            e.preventDefault(); document.querySelector('.circle').classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
