@@ -80,7 +80,7 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             Array.prototype.forEach.call(document.getElementsByClassName('hide'), function(e){
-                e.removeClass('hide');
+                e.style.display = 'block';
             });
             generate();
         })
