@@ -42,6 +42,9 @@
             text-align: center;
             margin: 0 auto;
         }
+        .hide {
+            display: none;
+        }
         .top {
             top: 20%;
         }
@@ -64,9 +67,9 @@
 </head>
 <body>
 <div class="bg" id="bg">
-    <h1 class="top">It's lucky to meet you.</h1>
-    <h1 class="middle">Jessica</h1>
-    <h1 class="bottom">Let's explore the world together.</h1>
+    <h1 class="top hide">It's lucky to meet you.</h1>
+    <h1 class="middle hide">Jessica</h1>
+    <h1 class="bottom hide">Let's explore the world together.</h1>
 </div>
 <div id="result" class="result"></div>
 <div class="scratch">scratch</div>
@@ -76,6 +79,9 @@
         var img=document.getElementById(imgId);
 
         document.addEventListener('DOMContentLoaded', function() {
+            document.getElementsByClassName('hide').forEach(function(e) {
+                e.removeClass('hide');
+            });
             generate();
         })
         function generate(){
