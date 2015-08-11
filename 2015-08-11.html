@@ -79,7 +79,7 @@
         var img=document.getElementById(imgId);
 
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementsByClassName('hide').forEach(function(e) {
+            Array.prototype.forEach.call(document.getElementsByClassName('hide'), function(e){
                 e.removeClass('hide');
             });
             generate();
