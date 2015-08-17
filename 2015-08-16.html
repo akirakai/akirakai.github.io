@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <base target="_blank">
+    <title>2015/08/16</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        html {
+            background-image: -webkit-linear-gradient(45deg, rgb(0,0,0), rgb(43, 73, 26));
+            background-image: linear-gradient(45deg, rgb(0,0,0), rgb(43, 73, 26));
+            height: 100%;
+        }
+
+        .wrapper {
+            position:relative;
+            height: 300px;
+            width: 400px;
+            margin:50px 0 0 80px;
+            perspective: 800;
+            perspective-origin: 50% 100px;
+        }
+
+        #cube {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            transform-style: preserve-3d;
+            animation: cube 10s ease-out 1s infinite normal;
+        }
+
+        .side {
+            position: absolute;
+            height: 200px;
+            width: 200px;
+            background: linear-gradient(145deg, rgba(120, 193, 146, 1), rgba(16, 45, 9, 1));
+            color: #fff;
+            border-radius: 0px;
+            border: 3px solid #fff;
+            font-family: Helvetica, Arial, sans-serif;
+            box-sizing: border-box;
+        }
+        #side1 {
+            -webkit-transform: translateZ(100px);
+            transform: translateZ(100px);
+        }
+
+        #side2 {
+            -webkit-transform: translateZ(-100px) rotateY(180deg);
+            transform: translateZ(-100px) rotateY(180deg);
+        }
+
+        #side3 {
+            -webkit-transform:rotateX(-90deg) translateY(-100px);
+            transform:rotateX(-90deg) translateY(-100px);
+            -webkit-transform-origin: top center;
+            transform-origin: top center;
+        }
+
+        #side4 {
+            -webkit-transform:rotateX(270deg) translateY(100px);
+            transform:rotateX(270deg) translateY(100px);
+            -webkit-transform-origin: bottom center;
+            transform-origin: bottom center;
+        }
+
+        #side5 {
+            -webkit-transform:rotateY(270deg) translateX(-100px);
+            transform:rotateY(270deg) translateX(-100px);
+            -webkit-transform-origin: center left;
+            transform-origin: center left;
+        }
+
+        #side6 {
+            -webkit-transform:rotateY(-270deg) translateX(100px);
+            transform:rotateY(-270deg) translateX(100px);
+            -webkit-transform-origin: top right;
+            transform-origin: top right;
+        }
+
+        .element {
+            font-size: 120px;
+            line-height: 200px;
+            text-align: center;
+            font-weight: bold;
+            text-shadow: 0px 1px 2px rgba(#000000, 0.2);
+        }
+
+        .topleft {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .topright {
+            position: absolute;
+            right: 5px;
+            top: 10px;
+            text-align: right;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .bottom1 {
+            position: absolute;
+            left: 6px;
+            top: 160px;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .bottom2 {
+            position: absolute;
+            left: 6px;
+            top: 168px;
+            font-size: 18px;
+        }
+
+        .text {
+            color: #fff;
+            font-size: 135px;
+            position: absolute;
+            top: 25px;
+            left: 230px;
+            font-family: Georgia;
+            opacity: 0;
+        }
+
+        .reacking {
+            -webkit-animation: textone 10s ease-out 1s infinite normal;
+            animation: textone 10s ease-out 1s infinite normal;
+        }
+
+        .dlet {
+            -webkit-animation: texttwo 10s ease-out 1s infinite normal;
+            animation: texttwo 10s ease-out 1s infinite normal;
+        }
+
+        @-webkit-keyframes cube {
+            0% {
+                -webkit-transform: rotateX(0deg);
+            }
+            20%, 40% {
+                -webkit-transform: rotateY(180deg);
+            }
+            60%, 80% {
+                -webkit-transform: rotateX(90deg);
+            }
+            95%,100% {
+                -webkit-transform: rotateX(0deg);
+            }
+        }
+
+        @keyframes cube {
+            0% {
+                transform: rotateX(0deg);
+            }
+            20%, 40% {
+                transform: rotateY(180deg);
+            }
+            60%, 80% {
+                transform: rotateX(90deg);
+            }
+            95%,100% {
+                transform: rotateX(0deg);
+            }
+        }
+
+        @-webkit-keyframes textone {
+            20% {opacity: 0;}
+            40% {opacity: 90;}
+            60%, 80% {opacity: 0;}
+            95%,100% {opacity: 0;}
+        }
+
+        @keyframes textone {
+            20% {opacity: 0;}
+            40% {opacity: 90;}
+            60%, 80% {opacity: 0;}
+            95%,100% {opacity: 0;}
+        }
+
+        @-webkit-keyframes texttwo {
+            20% {opacity: 0;}
+            60% {opacity: 0;}
+            80% {opacity: 90;}
+            95%,100% {opacity: 0;}
+        }
+
+        @keyframes texttwo {
+            20% {opacity: 0;}
+            60% {opacity: 0;}
+            80% {opacity: 90;}
+            95%,100% {opacity: 0;}
+        }
+
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <div id="cube">
+        <div class="side" id="side1">
+            <div class="topleft">55.06</div>
+            <div class="topright"></div>
+            <div class="element">Cp</div>
+            <div class="bottom1">26</div>
+            <div class="bottom2"></div>
+        </div>
+        <div class="side" id="side2">
+            <div class="topleft">9.0122</div>
+            <div class="topright"></div>
+            <div class="element">Be</div>
+            <div class="bottom1">4</div>
+            <div class="bottom2"></div>
+        </div>
+        <div class="side" id="side3">
+            <div class="topleft">22.95</div>
+            <div class="topright"> +1 </div>
+            <div class="element">Na</div>
+            <div class="bottom1">11</div>
+            <div class="bottom2"></div>
+        </div>
+        <div class="side" id="side4">
+            <div class="topleft">137.33</div>
+            <div class="topright"></div>
+            <div class="element">Cu</div>
+            <div class="bottom1">56</div>
+            <div class="bottom2"></div>
+        </div>
+        <div class="side" id="side5">
+            <div class="topleft">1.22</div>
+            <div class="topright"></div>
+            <div class="element">Zr</div>
+            <div class="bottom1">40</div>
+            <div class="bottom2"></div>
+        </div>
+        <div class="side" id="side6">
+            <div class="topleft">107.07</div>
+            <div class="topright"></div>
+            <div class="element">Ag</div>
+            <div class="bottom1">47</div>
+            <div class="bottom2"></div>
+        </div>
+    </div>
+    <div class="text reacking">autiful</div>
+    <div class="text dlet">te</div>
+</div>
+</body>
+</html>
