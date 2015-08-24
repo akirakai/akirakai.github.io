@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+    <title>2015/08/24</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        @-webkit-keyframes spin {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .fu-progress {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate3d(-50%, -50%, 0);
+            transform: translate3d(-50%, -50%, 0);
+            border: 5px solid #178bca;
+            border-radius: 50% !important;
+            overflow: hidden;
+        }
+        .fu-progress .fu-inner {
+            position: absolute;
+            overflow: hidden;
+            z-index: 2;
+            width: 240px;
+            height: 240px;
+            border: 5px solid #ffffff;
+            border-radius: 50% !important;
+        }
+        .fu-progress .fu-inner .water {
+            position: absolute;
+            z-index: 1;
+            background: rgba(23, 139, 202, 0.5);
+            width: 200%;
+            height: 200%;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+            /*transition: all 1s ease !important;*/
+            /*-webkit-transition: all 1s ease !important;*/
+            top: 50%;
+            left: -50%;
+            border: 1px solid transparent;
+            border-radius: 40% !important;
+            animation-duration: 10s;
+            animation-name: spin;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
+        .fu-progress .fu-inner .glare {
+            position: absolute;
+            top: -120%;
+            left: -120%;
+            z-index: 5;
+            width: 200%;
+            height: 200%;
+            transform: rotate(45deg);
+            background: #ffffff;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+        }
+        .fu-progress .fu-inner .fu-percent {
+            position: absolute;
+            top: 57px;
+            width: 100%;
+            height: 100%;
+            font-size: 6em;
+            font-weight: bold;
+            color: #045681;
+            text-align: center;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="fu-progress">
+    <div class="fu-inner">
+        <div class="fu-percent percent"><span>DJ</span></div>
+        <div class="water"></div>
+        <div class="glare"></div>
+    </div>
+</div>
+</body>
+</html>
