@@ -34,6 +34,7 @@
             -webkit-transform: translate3d(-50%, -50%, 0);
             transform: translate3d(-50%, -50%, 0);
             border: 5px solid #178bca;
+            -webkit-border-radius: 50% !important;
             border-radius: 50% !important;
             overflow: hidden;
         }
@@ -44,7 +45,10 @@
             width: 240px;
             height: 240px;
             border: 5px solid #ffffff;
-            border-radius: 50% !important;
+            -webkit-border-radius: 50%;
+            border-radius: 50%;
+            -webkit-mask-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
+            /*background-clip: content-box;*/
         }
         .fu-progress .fu-inner .water {
             position: absolute;
@@ -54,16 +58,13 @@
             height: 200%;
             transform: translateZ(0);
             -webkit-transform: translateZ(0);
-            /*transition: all 1s ease !important;*/
-            /*-webkit-transition: all 1s ease !important;*/
             top: 50%;
             left: -50%;
             border: 1px solid transparent;
-            border-radius: 40% !important;
-            animation-duration: 10s;
-            animation-name: spin;
-            animation-iteration-count: infinite;
-            animation-timing-function: linear;
+            -webkit-border-radius: 40%;
+            border-radius: 40%;
+            -webkit-animation: spin 10s infinite linear;
+            animation: spin 10s infinite linear;
         }
         .fu-progress .fu-inner .glare {
             position: absolute;
@@ -75,6 +76,7 @@
             transform: rotate(45deg);
             background: #ffffff;
             background: rgba(255, 255, 255, 0.2);
+            -webkit-border-radius: 50%;
             border-radius: 50%;
         }
         .fu-progress .fu-inner .fu-percent {
