@@ -103,6 +103,7 @@
             transform: translateX(-50%) translateY(-50%);
             background-color: yellow;
             opacity: 1;
+            z-index: 10;
         }
         .effect-wave.active {
             -webkit-animation: wave 1.5s ease;
@@ -114,7 +115,7 @@
 <body>
 <div class="button button-effect">
     <div class="text">
-        <div class="title">jessica</div>
+        <div class="title">wave</div>
         <div class="desc">tap the screen to see the wave</div>
     </div>
     <div class="effect-wave"></div>
@@ -136,6 +137,9 @@
                 .addClass('active');
 
         setTimeout(function(){$('.effect-wave').removeClass('active')}, 700);
+    })
+    $('.text').click(function(e) {
+        e.stopPropagation();
     })
 </script>
 </body>
