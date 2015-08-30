@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+    <title>2015/08/29</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+    <style>
+        canvas {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate3d(-50%, -50%, 0);
+            transform: translate3d(-50%, -50%, 0);
+        }
+    </style>
+</head>
+<body>
+<canvas id="demoCanvas"></canvas>
+<script src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
+<script src="https://code.createjs.com/tweenjs-0.6.1.min.js"></script>
+<script>
+    +function() {
+        var demoCanvas = document.getElementById('demoCanvas');
+        var width = document.body.clientWidth;
+        var height = 300;
+        demoCanvas.setAttribute('width', width);
+        demoCanvas.setAttribute('height', height);
+        var colors = ["#ff7700", "#008B8B", "#E9967A", "#00BFFF", "#8470FF",
+            "#66CDAA", "#C71585", "#FFC0CB", "#B0E0E6", "#EE82EE"];
+        function circle(stage, index) {
+            var circle = new createjs.Shape();
+            circle.graphics.beginFill(colors[index]).drawCircle(0, 0, 10);
+            circle.x = width * 0.2;
+            circle.y = height * 0.2;
+            stage.addChild(circle);
+            createjs.Tween.get(circle, { loop: true })
+                    .wait(index * 100)
+                    .to({ x: width * 0.8}, 1000, createjs.Ease.getPowInOut(2))
+                    .to({ alpha: 1, y: height * 0.8}, 500, createjs.Ease.getPowInOut(2))
+                    .to({ x: width * 0.2 }, 800, createjs.Ease.getPowInOut(2))
+                    .to({ x: width * 0.2, y: height * 0.2 }, 800, createjs.Ease.getPowInOut(2))
+        }
+        function init() {
+            var stage = new createjs.Stage("demoCanvas");
+            var text = new createjs.Text('Hi Doujia', "20px Arial", "#ff7700");
+            text.x = width * 0.5 - 40;
+            text.y = 150;
+            text.textBaseline = "alphabetic";
+            stage.addChild(text);
+            for (var i = 0; i < 10; i++) {
+                circle(stage, i);
+            }
+            createjs.Ticker.setFPS(60);
+            createjs.Ticker.addEventListener("tick", stage);
+        }
+        window.onload = init;
+    }();
+
+</script>
+</body>
+</html>
