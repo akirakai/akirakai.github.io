@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+<head>
+    <title>2015/08/30</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+    <style>
+        canvas {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate3d(-50%, -50%, 0);
+            transform: translate3d(-50%, -50%, 0);
+        }
+        .sign {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 14px;
+            color: #333;
+            font-style: italic;
+        }
+        #doujia {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 20px;
+            margin-left: -43px;
+            margin-top: -16px;
+        }
+    </style>
+</head>
+<body>
+<canvas id="demoCanvas"></canvas>
+<div class="sign">Beyond</div>
+<div id="doujia">
+    Doujia<br>
+    I love you
+</div>
+<script src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
+<script>
+    +function() {
+
+        var center = {x: 150, y: 150};
+
+        var stage = new createjs.Stage("demoCanvas");
+
+        var colors = ["#ff7700", "#008B8B", "#E9967A", "#00BFFF", "#8470FF",
+            "#66CDAA", "#C71585", "#FFC0CB", "#B0E0E6", "#EE82EE"];
+
+        function Circle(radius, angle, color, velocity) {
+            this.radius = radius;
+            this.angle = angle;
+            this.color = color;
+            this.flag = 1;
+            this.velocity = velocity;
+            this.originRadius = radius;
+            this.circle = new createjs.Shape();
+            this.circle.graphics.beginFill(color).drawCircle(0, 0, 5);
+            stage.addChild(this.circle);
+        }
+        Circle.prototype.update = function() {
+            this.angle += this.velocity;
+            this.radius += this.flag;
+            if (this.radius > this.originRadius + 50) {
+                this.flag = -1;
+            }
+            else if (this.radius < this.originRadius - 50) {
+                this.flag = 1;
+            }
+            this.circle.x = center.x + this.radius * Math.cos(Math.PI * this.angle / 180);
+            this.circle.y = center.y + this.radius * Math.sin(Math.PI * this.angle / 180);
+        };
+        function init() {
+            var demoCanvas = document.getElementById('demoCanvas');
+            var width = document.body.clientWidth;
+            var height = 300;
+            var circles1 = [];
+            var circles2 = [];
+            var number = colors.length;
+
+            center.x = width / 2;
+            center.y = 150;
+            demoCanvas.setAttribute('width', width);
+            demoCanvas.setAttribute('height', height);
+
+            createjs.Ticker.setFPS(60);
+            var i;
+            for (i = 0; i < number; i++) {
+                circles1.push(new Circle(120, i * 360 / number, colors[i], 3));
+            }
+            createjs.Ticker.addEventListener("tick", function() {
+                circles1.forEach(function(circle) {
+                    circle.update();
+                })
+                stage.update();
+            });
+            for (i = 0; i < number; i++) {
+                circles2.push(new Circle(100, i * 360 / number - 180 / number, colors[i], -3));
+            }
+            createjs.Ticker.addEventListener("tick", function() {
+                circles2.forEach(function(circle) {
+                    circle.update();
+                })
+                stage.update();
+            });
+        }
+        window.onload = init;
+        var index = 0;
+        setInterval(function(){
+            +function(){
+                document.body.style.backgroundColor = colors[index];
+                document.getElementById('doujia').style.color = colors[(index + 9) % 10];
+                index++;
+                if (index == 10) {
+                    index = 0;
+                }
+            }();
+        }, 1000);
+    }();
+
+</script>
+</body>
+</html>
