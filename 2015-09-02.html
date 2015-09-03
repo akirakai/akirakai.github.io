@@ -99,7 +99,7 @@
             center.x = width / 2;
             center.y = height / 2;
             cur.x = width / 2;
-            cur.y = 0;
+            cur.y = height / 2;
             canvas.setAttribute('width', width);
             canvas.setAttribute('height', height);
 
@@ -110,6 +110,7 @@
             });
         }
         window.onload = init;
+
         document.addEventListener('touchstart',function(e) {
             cur.x = e.changedTouches[0].clientX;
             cur.y = e.changedTouches[0].clientY;
