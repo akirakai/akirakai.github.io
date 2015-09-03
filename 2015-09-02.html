@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+<head>
+    <title>2015/09/02</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        #canvas {
+            display: block;
+            cursor: none;
+        }
+        .sign {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 14px;
+            color: black;
+            font-style: italic;
+        }
+        #doujia {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 20px;
+            margin-left: -43px;
+            margin-top: -16px;
+            color: royalblue;
+        }
+        .help {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: black;
+            font-size: 12px;
+            text-decoration: underline;
+        }
+        #position {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: black;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<div class="sign">Beyond</div>
+<div id="doujia">
+    Doujia<br>
+    I love you
+</div>
+<div class="help">
+    Touch the screen to see the effect
+</div>
+<div id="position">
+
+</div>
+<script type="text/javascript" src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
+<script>
+    +function() {
+
+        var stage = new createjs.Stage("canvas");
+        var center = {};
+        var cur = {};
+
+        function Path() {
+            this.x = center.x;
+            this.y = center.y;
+            this.velocity = 2;
+        }
+        Path.prototype.update = function() {
+            var disX = cur.x - this.x;
+            var disY = cur.y - this.y;
+            var dis = Math.sqrt(disX * disX + disY * disY);
+            if (dis) {
+                this.x += this.velocity * disX / dis;
+                this.y += this.velocity * disY / dis;
+                stage.addChild(new Point(this.x, this.y));
+                stage.update();
+            }
+        };
+        function Point(x, y) {
+            var point = new createjs.Shape();
+            point.graphics.beginFill("#ff7700").drawCircle(x, y, 2);
+            return point;
+        }
+        function init() {
+            var canvas = document.getElementById('canvas');
+            var width = document.body.clientWidth;
+            var height = document.body.clientHeight;
+
+
+            center.x = width / 2;
+            center.y = height / 2;
+            cur.x = width / 2;
+            cur.y = 0;
+            canvas.setAttribute('width', width);
+            canvas.setAttribute('height', height);
+
+            var path = new Path();
+            createjs.Ticker.setFPS(60);
+            createjs.Ticker.addEventListener("tick", function() {
+                path.update();
+            });
+        }
+        window.onload = init;
+        document.addEventListener('touchstart',function(e) {
+            cur.x = e.changedTouches[0].clientX;
+            cur.y = e.changedTouches[0].clientY;
+        }, false);
+        document.addEventListener('touchmove',function(e) {
+            cur.x = e.touches[0].clientX;
+            cur.y = e.touches[0].clientY;
+            console.log(e);
+            document.getElementById('position').innerText = e.touches.length + ' ' + cur.x + ' ' + cur.y;
+        }, false);
+    }();
+</script>
+</body>
+</html>
