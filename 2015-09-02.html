@@ -39,13 +39,6 @@
             font-size: 12px;
             text-decoration: underline;
         }
-        #position {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: black;
-            font-size: 12px;
-        }
     </style>
 </head>
 <body>
@@ -57,9 +50,6 @@
 </div>
 <div class="help">
     Touch the screen to see the effect
-</div>
-<div id="position">
-
 </div>
 <script type="text/javascript" src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
 <script>
@@ -118,8 +108,6 @@
         document.addEventListener('touchmove',function(e) {
             cur.x = e.touches[0].clientX;
             cur.y = e.touches[0].clientY;
-            console.log(e);
-            document.getElementById('position').innerText = e.touches.length + ' ' + cur.x + ' ' + cur.y;
         }, false);
     }();
 </script>
