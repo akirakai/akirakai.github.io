@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+<head>
+    <title>2015/09/04</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        #canvas {
+            display: block;
+            cursor: none;
+            height: 100%;
+            width: 100%;
+        }
+        .sign {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+        }
+        #doujia {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 18px;
+            -webkit-transform: translate3d(-50%, -50%, 0);
+            transform: translate3d(-50%, -50%, 0);
+            color: royalblue;
+        }
+        .help {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: tomato;
+            font-size: 12px;
+            text-decoration: underline;
+        }
+        .description {
+            position: absolute;
+            bottom: 40px;
+            left: 20px;
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<div class="sign">Beyond</div>
+<div id="doujia">
+    Tomorrow is beautiful, so are you.
+</div>
+<div class="help">
+    Touch the screen to see the effect~
+</div>
+<div id="position">
+
+</div>
+<script type="text/javascript" src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
+<script>
+    +function() {
+
+        var stage = new createjs.Stage("canvas");
+        var width = document.body.clientWidth;
+        var height = document.body.clientHeight;
+        var count = 0;
+        var center = {};
+        var cur = {};
+
+        function Particle(radius, angle, velocity, color, x, y) {
+            this.x = x;
+            this.y = y;
+            this.angle = angle;
+            this.velocity = velocity;
+            this.counter = 0;
+            this.particle = new createjs.Shape();
+            this.particle.graphics.beginFill(color).drawCircle(0, 0, radius);
+            this.particle.x = x;
+            this.particle.y = y;
+            stage.addChild(this.particle);
+            return this;
+        }
+        Particle.prototype.update = function() {
+            var disX = cur.x - this.x;
+            var disY = cur.y - this.y;
+            var dis = Math.sqrt(disX * disX + disY * disY);
+            if (dis) {
+                if (disX) {
+                    this.angle = Math.atan(disY/disX);
+                    if (disX < 0) {
+                        this.angle += Math.PI;
+                    }
+                }
+                else {
+                    if (disY > 0) {
+                        this.angle = Math.PI / 2;
+                    }
+                    else {
+                        this.angle = 3 * Math.PI / 2;
+                    }
+                }
+            }
+            this.x += Math.cos(this.angle) * this.velocity;
+            this.y += Math.sin(this.angle) * this.velocity;
+            this.particle.x = this.x;
+            this.particle.y = this.y;
+            this.counter++;
+        };
+        Particle.prototype.inBound = function() {
+            return (this.x >= 0 && this.x <= width && this.y >= 0 && this.y <= height);
+        };
+
+        function Emitter(angle, color) {
+            this.radius = 50;
+            this.particles = {};
+            this.angle = angle;
+            this.color = color;
+            var emitter = new createjs.Shape();
+            emitter.graphics.beginFill(color).drawCircle(0, 0, 5);
+            this.emitter = emitter;
+            this.emitter.x = center.x + this.radius * Math.cos(this.angle);
+            this.emitter.y = center.y + this.radius * Math.sin(this.angle);
+            stage.addChild(emitter);
+        }
+        Emitter.prototype.emit = function() {
+            var angle = parseInt(Math.random() * 360, 10) / 180 * Math.PI;
+            var velocity = parseInt(Math.random() * 10, 10) + 2;
+            this.particles[count++] = new Particle(2, angle, velocity, this.color, this.emitter.x, this.emitter.y);
+        };
+        Emitter.prototype.update = function() {
+//                    this.emitter.x = center.x + this.radius * Math.cos(Math.PI * this.angle / 180);
+//                    this.emitter.y = center.y + this.radius * Math.sin(Math.PI * this.angle / 180);
+//                    this.angle++;
+
+            for (var i in this.particles) {
+                if (!this.particles.hasOwnProperty(i)) {
+                    continue;
+                }
+                if (!this.particles[i].inBound() || this.particles[i].counter >= 100) {
+                    stage.removeChild(this.particles[i].particle);
+                    delete this.particles[i];
+                }
+                else {
+//                    if (this.particles[i].counter <= 10) {
+                    this.particles[i].update();
+//                    }
+                }
+            }
+            stage.update();
+        };
+        function init() {
+            var canvas = document.getElementById('canvas');
+            var colors = ["#00BFFF", "#FF69B4", "#3CB371", "#FFD700", "#CD5C5C", "#FF4500"];
+            var emitters = [];
+            var counter = 0;
+
+            cur.x = center.x = width / 2;
+            cur.y = center.y = height / 2;
+            canvas.setAttribute('width', width);
+            canvas.setAttribute('height', height);
+            createjs.Ticker.setFPS(60);
+            for (var i = 0; i < colors.length; i++) {
+                emitters.push(new Emitter(Math.PI * 2 / colors.length * (i + 0.5), colors[i]));
+            }
+            createjs.Ticker.addEventListener("tick", function() {
+//                cur = {x: stage.mouseX, y: stage.mouseY};
+                counter++;
+                emitters.forEach(function(emitter) {
+                    if (counter % 6 == 0) {
+                        emitter.emit();
+                    }
+                    emitter.update();
+                })
+            });
+            canvas.addEventListener('touchmove', function(e){
+                cur.x = e.touches[0].clientX;
+                cur.y = e.touches[0].clientY;
+            });
+            canvas.addEventListener('mousemove', function(e){
+                cur.x = e.clientX;
+                cur.y = e.clientY;
+            })
+        }
+        window.onload = init;
+    }();
+</script>
+</body>
+</html>
