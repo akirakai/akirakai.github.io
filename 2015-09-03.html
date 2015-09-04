@@ -15,38 +15,38 @@
             cursor: none;
             height: 100%;
             width: 100%;
-            /*background: #000;*/
         }
         .sign {
             position: absolute;
             bottom: 20px;
             right: 20px;
             font-size: 14px;
-            color: black;
+            color: #666;
             font-style: italic;
         }
         #doujia {
             position: absolute;
             top: 50%;
             left: 50%;
-            font-size: 20px;
-            margin-left: -43px;
-            margin-top: -16px;
-            color: royalblue;
+            font-size: 30px;
+            -webkit-transform: translate3d(-50%, -50%, 0);
+            transform: translate3d(-50%, -50%, 0);
+            color: white;
+            z-index: 5;
         }
         .help {
             position: absolute;
             bottom: 20px;
             left: 20px;
-            color: black;
+            color: tomato;
             font-size: 12px;
             text-decoration: underline;
         }
-        #position {
+        .description {
             position: absolute;
-            top: 20px;
+            bottom: 40px;
             left: 20px;
-            color: black;
+            color: #666;
             font-size: 12px;
         }
     </style>
@@ -55,11 +55,14 @@
 <canvas id="canvas"></canvas>
 <div class="sign">Beyond</div>
 <div id="doujia">
-    Doujia<br>
-    I love you
+    U look so tired<br>
+    take care
+</div>
+<div class="description">
+    I apologize for this morning's bug, and this is the modified one.
 </div>
 <div class="help">
-    Wait to see the final effect
+    Wait to see the final effect or you can do other things and come back minutes later~
 </div>
 <div id="position">
 
@@ -79,6 +82,7 @@
             this.y = y;
             this.angle = angle;
             this.velocity = velocity;
+            this.counter = 0;
             this.particle = new createjs.Shape();
             this.particle.graphics.beginFill(color).drawCircle(0, 0, radius);
             this.particle.x = x;
@@ -91,30 +95,33 @@
             this.y += Math.sin(this.angle * Math.PI / 180) * this.velocity;
             this.particle.x = this.x;
             this.particle.y = this.y;
+            this.counter++;
         };
         Particle.prototype.inBound = function() {
             return (this.x >= 0 && this.x <= width && this.y >= 0 && this.y <= height);
         };
 
         function Emitter(angle, color) {
-            this.radius = 100;
+            this.radius = 50;
             this.particles = {};
             this.angle = angle;
             this.color = color;
             var emitter = new createjs.Shape();
             emitter.graphics.beginFill(color).drawCircle(0, 0, 5);
             this.emitter = emitter;
+            this.emitter.x = center.x + this.radius * Math.cos(Math.PI * this.angle / 180);
+            this.emitter.y = center.y + this.radius * Math.sin(Math.PI * this.angle / 180);
             stage.addChild(emitter);
         }
         Emitter.prototype.emit = function() {
             var angle = parseInt(Math.random() * 360, 10);
-            var velocity = parseInt(Math.random() * 5, 10) + 2;
+            var velocity = parseInt(Math.random() * 10, 10) + 2;
             this.particles[count++] = new Particle(2, angle, velocity, this.color, this.emitter.x, this.emitter.y);
         };
         Emitter.prototype.update = function() {
-            this.emitter.x = center.x + this.radius * Math.cos(Math.PI * this.angle / 180);
-            this.emitter.y = center.y + this.radius * Math.sin(Math.PI * this.angle / 180);
-            this.angle++;
+//                    this.emitter.x = center.x + this.radius * Math.cos(Math.PI * this.angle / 180);
+//                    this.emitter.y = center.y + this.radius * Math.sin(Math.PI * this.angle / 180);
+//                    this.angle++;
 
             for (var i in this.particles) {
                 if (!this.particles.hasOwnProperty(i)) {
@@ -125,14 +132,16 @@
                     delete this.particles[i];
                 }
                 else {
-                    this.particles[i].update();
+                    if (this.particles[i].counter <= 10) {
+                        this.particles[i].update();
+                    }
                 }
             }
             stage.update();
         };
         function init() {
             var canvas = document.getElementById('canvas');
-            var colors = ["#00BFFF", "#FF69B4", "#3CB371"];
+            var colors = ["#00BFFF", "#FF69B4", "#3CB371", "#FFD700", "#CD5C5C", "#FF4500"];
             var emitters = [];
             var counter = 0;
 
@@ -142,7 +151,7 @@
             canvas.setAttribute('height', height);
             createjs.Ticker.setFPS(60);
             for (var i = 0; i < colors.length; i++) {
-                emitters.push(new Emitter(360 / colors.length * i, colors[i]));
+                emitters.push(new Emitter(360 / colors.length * (i + 0.5), colors[i]));
             }
             createjs.Ticker.addEventListener("tick", function() {
                 counter++;

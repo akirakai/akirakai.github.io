@@ -114,7 +114,7 @@
         }
         Emitter.prototype.emit = function() {
             var angle = parseInt(Math.random() * 360, 10);
-            var velocity = parseInt(Math.random() * 7, 10) + 2;
+            var velocity = parseInt(Math.random() * 5, 10) + 2;
             this.particles[count++] = new Particle(2, angle, velocity, this.color, this.emitter.x, this.emitter.y);
         };
         Emitter.prototype.update = function() {
