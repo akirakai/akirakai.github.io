@@ -58,9 +58,9 @@
     Doujia<br>
     I love you
 </div>
-<!--<div class="help">-->
-    <!--Wait to see the final effect-->
-<!--</div>-->
+<div class="help">
+    Wait to see the final effect
+</div>
 <div id="position">
 
 </div>
@@ -132,8 +132,9 @@
         };
         function init() {
             var canvas = document.getElementById('canvas');
-            var colors = ["#ff7700", "#008B8B", "#E9967A", "#00BFFF", "#8470FF", "#66CDAA"];
+            var colors = ["#00BFFF", "#FF69B4", "#3CB371"];
             var emitters = [];
+            var counter = 0;
 
             center.x = width / 2;
             center.y = height / 2;
@@ -144,8 +145,11 @@
                 emitters.push(new Emitter(360 / colors.length * i, colors[i]));
             }
             createjs.Ticker.addEventListener("tick", function() {
+                counter++;
                 emitters.forEach(function(emitter) {
-                    emitter.emit();
+                    if (counter % 6 == 0) {
+                        emitter.emit();
+                    }
                     emitter.update();
                 })
             });
