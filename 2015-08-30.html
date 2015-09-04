@@ -1,22 +1,27 @@
 <!doctype html>
 <html>
 <head>
-    <title>2015/08/30</title>
+    <title>2015/09/03</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
     <style>
-        canvas {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            -webkit-transform: translate3d(-50%, -50%, 0);
-            transform: translate3d(-50%, -50%, 0);
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        #canvas {
+            display: block;
+            cursor: none;
+            height: 100%;
+            width: 100%;
         }
         .sign {
             position: absolute;
-            bottom: 10px;
-            right: 10px;
+            bottom: 20px;
+            right: 20px;
             font-size: 14px;
-            color: #333;
+            color: #666;
             font-style: italic;
         }
         #doujia {
@@ -26,98 +31,139 @@
             font-size: 20px;
             margin-left: -43px;
             margin-top: -16px;
+            color: royalblue;
+        }
+        .help {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: tomato;
+            font-size: 12px;
+            text-decoration: underline;
+        }
+        .description {
+            position: absolute;
+            bottom: 40px;
+            left: 20px;
+            color: #666;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
-<canvas id="demoCanvas"></canvas>
+<canvas id="canvas"></canvas>
 <div class="sign">Beyond</div>
 <div id="doujia">
     Doujia<br>
     I love you
 </div>
-<script src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
+<div class="description">
+    I apologize for this morning's bug, and this is the modified one.
+</div>
+<div class="help">
+    Wait to see the final effect or you can do other things and come back minutes later~
+</div>
+<div id="position">
+
+</div>
+<script type="text/javascript" src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
 <script>
     +function() {
 
-        var center = {x: 150, y: 150};
+        var stage = new createjs.Stage("canvas");
+        var width = document.body.clientWidth;
+        var height = document.body.clientHeight;
+        var count = 0;
+        var center = {};
 
-        var stage = new createjs.Stage("demoCanvas");
+        function Particle(radius, angle, velocity, color, x, y) {
+            this.x = x;
+            this.y = y;
+            this.angle = angle;
+            this.velocity = velocity;
+            this.counter = 0;
+            this.particle = new createjs.Shape();
+            this.particle.graphics.beginFill(color).drawCircle(0, 0, radius);
+            this.particle.x = x;
+            this.particle.y = y;
+            stage.addChild(this.particle);
+            return this;
+        }
+        Particle.prototype.update = function() {
+            this.x += Math.cos(this.angle * Math.PI / 180) * this.velocity;
+            this.y += Math.sin(this.angle * Math.PI / 180) * this.velocity;
+            this.particle.x = this.x;
+            this.particle.y = this.y;
+            this.counter++;
+        };
+        Particle.prototype.inBound = function() {
+            return (this.x >= 0 && this.x <= width && this.y >= 0 && this.y <= height);
+        };
 
-        var colors = ["#ff7700", "#008B8B", "#E9967A", "#00BFFF", "#8470FF",
-            "#66CDAA", "#C71585", "#FFC0CB", "#B0E0E6", "#EE82EE"];
-
-        function Circle(radius, angle, color, velocity) {
-            this.radius = radius;
+        function Emitter(angle, color) {
+            this.radius = 100;
+            this.particles = {};
             this.angle = angle;
             this.color = color;
-            this.flag = 1;
-            this.velocity = velocity;
-            this.originRadius = radius;
-            this.circle = new createjs.Shape();
-            this.circle.graphics.beginFill(color).drawCircle(0, 0, 5);
-            stage.addChild(this.circle);
+            var emitter = new createjs.Shape();
+            emitter.graphics.beginFill(color).drawCircle(0, 0, 5);
+            this.emitter = emitter;
+            this.emitter.x = center.x + this.radius * Math.cos(Math.PI * this.angle / 180);
+            this.emitter.y = center.y + this.radius * Math.sin(Math.PI * this.angle / 180);
+            stage.addChild(emitter);
         }
-        Circle.prototype.update = function() {
-            this.angle += this.velocity;
-            this.radius += this.flag;
-            if (this.radius > this.originRadius + 50) {
-                this.flag = -1;
+        Emitter.prototype.emit = function() {
+            var angle = parseInt(Math.random() * 360, 10);
+            var velocity = parseInt(Math.random() * 7, 10) + 2;
+            this.particles[count++] = new Particle(2, angle, velocity, this.color, this.emitter.x, this.emitter.y);
+        };
+        Emitter.prototype.update = function() {
+//                    this.emitter.x = center.x + this.radius * Math.cos(Math.PI * this.angle / 180);
+//                    this.emitter.y = center.y + this.radius * Math.sin(Math.PI * this.angle / 180);
+//                    this.angle++;
+
+            for (var i in this.particles) {
+                if (!this.particles.hasOwnProperty(i)) {
+                    continue;
+                }
+                if (!this.particles[i].inBound()) {
+                    stage.removeChild(this.particles[i].particle);
+                    delete this.particles[i];
+                }
+                else {
+                    if (this.particles[i].counter <= 30) {
+                        this.particles[i].update();
+                    }
+                }
             }
-            else if (this.radius < this.originRadius - 50) {
-                this.flag = 1;
-            }
-            this.circle.x = center.x + this.radius * Math.cos(Math.PI * this.angle / 180);
-            this.circle.y = center.y + this.radius * Math.sin(Math.PI * this.angle / 180);
+            stage.update();
         };
         function init() {
-            var demoCanvas = document.getElementById('demoCanvas');
-            var width = document.body.clientWidth;
-            var height = 300;
-            var circles1 = [];
-            var circles2 = [];
-            var number = colors.length;
+            var canvas = document.getElementById('canvas');
+            var colors = ["#00BFFF", "#FF69B4", "#3CB371", "#FFD700", "#CD5C5C", "#FF4500"];
+            var emitters = [];
+            var counter = 0;
 
             center.x = width / 2;
-            center.y = 150;
-            demoCanvas.setAttribute('width', width);
-            demoCanvas.setAttribute('height', height);
-
+            center.y = height / 2;
+            canvas.setAttribute('width', width);
+            canvas.setAttribute('height', height);
             createjs.Ticker.setFPS(60);
-            var i;
-            for (i = 0; i < number; i++) {
-                circles1.push(new Circle(120, i * 360 / number, colors[i], 3));
+            for (var i = 0; i < colors.length; i++) {
+                emitters.push(new Emitter(360 / colors.length * (i + 0.5), colors[i]));
             }
             createjs.Ticker.addEventListener("tick", function() {
-                circles1.forEach(function(circle) {
-                    circle.update();
+                counter++;
+                emitters.forEach(function(emitter) {
+                    if (counter % 6 == 0) {
+                        emitter.emit();
+                    }
+                    emitter.update();
                 })
-                stage.update();
-            });
-            for (i = 0; i < number; i++) {
-                circles2.push(new Circle(100, i * 360 / number - 180 / number, colors[i], -3));
-            }
-            createjs.Ticker.addEventListener("tick", function() {
-                circles2.forEach(function(circle) {
-                    circle.update();
-                })
-                stage.update();
             });
         }
         window.onload = init;
-        var index = 0;
-        setInterval(function(){
-            +function(){
-                document.body.style.backgroundColor = colors[index];
-                document.getElementById('doujia').style.color = colors[(index + 9) % 10];
-                index++;
-                if (index == 10) {
-                    index = 0;
-                }
-            }();
-        }, 1000);
     }();
-
 </script>
 </body>
 </html>
