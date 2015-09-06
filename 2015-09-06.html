@@ -1,0 +1,258 @@
+<!doctype html>
+<html>
+<head>
+    <title>2015/09/06</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            font-family: "ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Hiragino Sans GB","Hiragino Sans GB W3";
+        }
+
+        #canvas {
+            display: block;
+            cursor: none;
+            height: 100%;
+            width: 100%;
+        }
+        .sign {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+        }
+        #doujia {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 18px;
+            -webkit-transform: translate3d(-50%, -50%, 0);
+            transform: translate3d(-50%, -50%, 0);
+            color: royalblue;
+            z-index: -1;
+        }
+        .help {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: tomato;
+            font-size: 12px;
+            text-decoration: underline;
+        }
+        .description {
+            position: absolute;
+            bottom: 40px;
+            left: 20px;
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<div class="sign">Beyond</div>
+<div id="doujia">
+    You cannot see me, <br/>until you see the particles.
+    <br/>
+    <br/>
+    I love you, Doujia!
+</div>
+<div class="help">
+    Use pc to see the effect~
+</div>
+<div id="position">
+
+</div>
+<script type="text/javascript" src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
+<script>
+    +function() {
+
+        var stage = new createjs.Stage("canvas");
+        var width = document.body.clientWidth;
+        var height = document.body.clientHeight;
+        var count = 0;
+        var center = {};
+        var cur = {};
+
+        function Particle(radius, angle, velocity, color, x, y, reverse) {
+            this.x = x;
+            this.y = y;
+            this.angle = angle;
+            this.velocity = velocity;
+            this.counter = 0;
+            this.particle = new createjs.Shape();
+            this.particle.graphics.beginFill(color).drawCircle(0, 0, radius);
+            this.particle.x = x;
+            this.particle.y = y;
+            this.reverse = reverse || false;
+            stage.addChild(this.particle);
+            return this;
+        }
+        Particle.prototype.update = function() {
+            var disX = cur.x - this.x;
+            var disY = cur.y - this.y;
+            var dis = Math.sqrt(disX * disX + disY * disY);
+            if (dis) {
+                if (dis < 300) {
+                    if (disX) {
+                        this.angle = Math.atan(disY/disX);
+                        if (this.reverse) {
+                            if (disX >= 0) {
+                                this.angle += Math.PI;
+                            }
+                        }
+                        else {
+                            if (disX < 0) {
+                                this.angle += Math.PI;
+                            }
+                        }
+                    }
+                    else {
+                        if (this.reverse) {
+                            if (disY < 0) {
+                                this.angle = Math.PI / 2;
+                            }
+                            else {
+                                this.angle = 3 * Math.PI / 2;
+                            }
+                        }
+                        else {
+                            if (disY < 0) {
+                                this.angle = 3 * Math.PI / 2;
+                            }
+                            else {
+                                this.angle = Math.PI / 2;
+                            }
+                        }
+                    }
+                }
+            }
+            this.x += Math.cos(this.angle) * this.velocity;
+            this.y += Math.sin(this.angle) * this.velocity;
+            this.particle.x = this.x;
+            this.particle.y = this.y;
+            this.counter++;
+        };
+        Particle.prototype.inBound = function() {
+            return (this.x >= 0 && this.x <= width && this.y >= 0 && this.y <= height);
+        };
+        Particle.prototype.onBound = function() {
+            var res;
+            if (this.x >= -5 && this.x <=5) {
+                res = 0;
+            }
+            else if (this.x >= (width - 5) && this.x <= (width + 5)) {
+                res = 2;
+            }
+            else {
+                res = 1;
+            }
+            res *= 3;
+            if (this.y >= -5 && this.y <=5) {
+                res += 0;
+            }
+            else if (this.y >= (height - 5) && this.y <= (height + 5)) {
+                res += 2;
+            }
+            else {
+                res += 1;
+            }
+            return res;
+        };
+
+        function Emitter(angle, color, reverse) {
+            this.radius = 150;
+            this.particles = {};
+            this.angle = angle;
+            this.color = color;
+            this.reverse = reverse;
+            var emitter = new createjs.Shape();
+            emitter.graphics.beginFill(color).drawCircle(0, 0, 5);
+            this.emitter = emitter;
+            this.emitter.x = center.x + this.radius * Math.cos(this.angle);
+            this.emitter.y = center.y + this.radius * Math.sin(this.angle);
+            stage.addChild(emitter);
+        }
+        Emitter.prototype.emit = function() {
+            var angle = parseInt(Math.random() * 360, 10) / 180 * Math.PI;
+            var velocity = parseInt(Math.random() * 3, 10) + 2;
+            this.particles[count++] = new Particle(2, angle, velocity, this.color, this.emitter.x, this.emitter.y,
+                    this.reverse);
+        };
+        Emitter.prototype.update = function() {
+            this.emitter.x = center.x + this.radius * Math.cos(this.angle);
+            this.emitter.y = center.y + this.radius * Math.sin(this.angle);
+            this.angle += 0.1 / Math.PI;
+
+            for (var i in this.particles) {
+                if (!this.particles.hasOwnProperty(i)) {
+                    continue;
+                }
+                if (this.particles[i].counter >= 500) {
+                    stage.removeChild(this.particles[i].particle);
+                    delete this.particles[i];
+                }
+                else {
+                    var res = this.particles[i].onBound();
+                    var bx = res / 3;
+                    var by = res % 3;
+                    if (bx != 1) {
+                        this.particles[i].angle = Math.PI - this.particles[i].angle;
+                    }
+                    if (by != 1) {
+                        this.particles[i].angle *= -1;
+                    }
+                    this.particles[i].update();
+                }
+//                if (!this.particles[i].inBound() || this.particles[i].counter >= 500) {
+//                    stage.removeChild(this.particles[i].particle);
+//                    delete this.particles[i];
+//                }
+//                else {
+//                    this.particles[i].update();
+//                }
+            }
+            stage.update();
+        };
+        function init() {
+            var canvas = document.getElementById('canvas');
+            var colors = ["#00BFFF", "#FF69B4", "#3CB371", "#FFD700", "#CD5C5C", "#FF4500"];
+            var emitters = [];
+            var counter = 0;
+
+            cur.x = center.x = width / 2;
+            cur.y = center.y = height / 2;
+            canvas.setAttribute('width', width);
+            canvas.setAttribute('height', height);
+            createjs.Ticker.setFPS(60);
+            for (var i = 0; i < colors.length; i++) {
+                emitters.push(new Emitter(Math.PI * 2 / colors.length * (i + 0.5), colors[i], i % 2));
+            }
+            createjs.Ticker.addEventListener("tick", function() {
+//                cur = {x: stage.mouseX, y: stage.mouseY};
+                counter++;
+                emitters.forEach(function(emitter) {
+                    if (counter % 6 == 0) {
+                        emitter.emit();
+                    }
+                    emitter.update();
+                })
+            });
+            canvas.addEventListener('touchmove', function(e){
+                cur.x = e.touches[0].clientX;
+                cur.y = e.touches[0].clientY;
+            });
+            canvas.addEventListener('mousemove', function(e){
+                cur.x = e.clientX;
+                cur.y = e.clientY;
+            })
+        }
+        window.onload = init;
+    }();
+</script>
+</body>
+</html>
