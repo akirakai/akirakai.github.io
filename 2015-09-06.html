@@ -13,7 +13,7 @@
 
         #canvas {
             display: block;
-            cursor: none;
+            /*cursor: none;*/
             height: 100%;
             width: 100%;
         }
@@ -59,7 +59,7 @@
     You cannot see me, <br/>until you see the particles.
     <br/>
     <br/>
-    I love you, Doujia!
+    <!--I love you, Doujia!-->
 </div>
 <div class="help">
     Use pc to see the effect~
@@ -198,10 +198,11 @@
                 }
                 else {
                     var res = this.particles[i].onBound();
-                    var bx = res / 3;
+                    var bx = Math.floor(res / 3);
                     var by = res % 3;
                     if (bx != 1) {
                         this.particles[i].angle = Math.PI - this.particles[i].angle;
+//                        console.log(bx)
                     }
                     if (by != 1) {
                         this.particles[i].angle *= -1;
