@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+<head>
+    <title>2015/09/14</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            font-family: "ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Hiragino Sans GB","Hiragino Sans GB W3";
+        }
+
+        #canvas {
+            display: block;
+            /*cursor: none;*/
+            height: 100%;
+            width: 100%;
+        }
+        .sign {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+        }
+        #doujia {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 18px;
+            -webkit-transform: translate3d(-50%, -50%, 0);
+            transform: translate3d(-50%, -50%, 0);
+            color: royalblue;
+            z-index: -1;
+        }
+        .help {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: #666;
+            font-size: 12px;
+            text-decoration: underline;
+        }
+        .description {
+            position: absolute;
+            bottom: 40px;
+            left: 20px;
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<div class="sign">Beyond</div>
+<div id="doujia">
+    <!--Lovely Doujia, <br/>Do you like the stars~-->
+</div>
+<div class="help">
+    Use pc to see the effect~
+</div>
+<div id="position">
+
+</div>
+<script type="text/javascript" src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
+<script>
+    +function() {
+
+        var stage = new createjs.Stage("canvas");
+        var width = document.body.clientWidth;
+        var height = document.body.clientHeight;
+        var count = 0;
+        var center = {};
+
+        function Particle(radius, color, x, y) {
+            this.x = x;
+            this.y = y;
+            this.particle = new createjs.Shape();
+            this.particle.graphics.beginFill(color).drawPolyStar(0, 0, radius, 6, 6, 0);//drawCircle(0, 0, radius);
+            this.particle.x = x;
+            this.particle.y = y;
+            stage.addChild(this.particle);
+            return this;
+        }
+        Particle.prototype.update = function() {
+//            this.particle.angle = this.particle.angle + 1 / Math.PI;
+//            console.log(this.particle.angle);
+        };
+
+        function getImage(canvas) {
+            var ctx = canvas.getContext('2d');
+            var matrix = ctx.getImageData(width / 2 - 20, height / 2 - 15, 60, 21)
+            return matrix;
+        }
+        function init() {
+            var canvas = document.getElementById('canvas');
+            var colors = ["#00BFFF", "#FF69B4", "#3CB371", "#FFD700", "#CD5C5C", "#FF4500"];
+            var particles = [];
+
+            canvas.setAttribute('width', width);
+            canvas.setAttribute('height', height);
+            var text = new createjs.Text("Doujia", "20px Arial", "#00BFFF");
+            text.x = width / 2 - 20;
+            text.y = height / 2;
+            text.textBaseline = "alphabetic";
+            stage.addChild(text);
+            var text = new createjs.Text("Doujia", "20px Arial", "#FFFFFF");
+            text.x = width / 2 - 20;
+            text.y = height / 2;
+            text.textBaseline = "alphabetic";
+            stage.addChild(text);
+            stage.update();
+            var matrix = getImage(canvas);
+            var columns = matrix.width;
+            var rows = matrix.height;
+            var pmatrix = [];
+            var data = matrix.data;
+            var index = 0;
+            for (var i = 0; i < rows; i++) {
+                var row = [];
+                for (var j = 0; j < columns; j++) {
+                    var r = data[index++];
+                    var g = data[index++];
+                    var b = data[index++];
+                    if (r || g || b) {
+                        row.push(1);
+                    }
+                    else {
+                        row.push(0);
+                    }
+                    index++;
+                }
+//                console.log(row)
+                pmatrix.push(row);
+            }
+            stage.clear();
+            createjs.Ticker.setFPS(60);
+//            for (var i = 0; i < colors.length; i++) {
+//                emitters.push(new Emitter(Math.PI * 2 / colors.length * (i + 0.5), colors[i], 1));
+//            }
+            for (i = 0; i < rows; i++) {
+                for (j = 0; j < columns; j++) {
+                    if (pmatrix[i][j]) {
+                        particles.push(new Particle(2, "#00BFFF", j * 15 + 100, i * 15 + 100));
+                    }
+                }
+            }
+//            stage.update();
+            createjs.Ticker.addEventListener("tick", function() {
+                particles.forEach(function(e) {
+                    e.update();
+                })
+                stage.update();
+            });
+        }
+        window.onload = init;
+    }();
+</script>
+</body>
+</html>
