@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>520 Love Maggie</title>
+    <style>
+        html,body{
+            height:100%;
+            margin:0;
+            padding:0;
+            overflow:hidden;
+            font-family:"PingFang SC","Microsoft Yahei",sans-serif;
+            background:linear-gradient(#fefcea,#f1daff);
+            color:#333;
+        }
+        #container{position:relative;height:100%;width:100%;overflow:hidden;}
+        .rainbow{
+            position:absolute;
+            top:5vh;
+            left:50%;
+            width:80vw;
+            height:20vh;
+            transform:translateX(-50%);
+            background:linear-gradient(to right,red,orange,yellow,green,cyan,blue,violet);
+            border-radius:50% 50% 0 0;
+            animation:float 3s ease-in-out infinite alternate;
+        }
+        @keyframes float{from{transform:translate(-50%,0);}to{transform:translate(-50%,-2vh);}}
+        .message{
+            position:absolute;
+            top:40vh;
+            width:100%;
+            text-align:center;
+            font-size:4vw;
+        }
+        .rose{
+            position:fixed;
+            font-size:2rem;
+            pointer-events:none;
+            animation:fall 8s linear infinite;
+        }
+        @keyframes fall{0%{transform:translateY(-10vh) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(360deg);opacity:0;}}
+        canvas{position:absolute;top:0;left:0;}
+        @media (min-width:768px){.message{font-size:40px;}.rose{font-size:30px;}}
+    </style>
+</head>
+<body>
+<div id="container">
+    <div class="rainbow"></div>
+    <div class="message">Maggie，Godel爱你，Lucky也爱你！</div>
+    <canvas id="fireworks"></canvas>
+</div>
+<script>
+    for(let i=0;i<20;i++){
+        const r=document.createElement('div');
+        r.className='rose';
+        r.textContent='🌹';
+        r.style.left=Math.random()*100+'vw';
+        r.style.animationDelay=Math.random()*5+'s';
+        document.body.appendChild(r);
+    }
+    const canvas=document.getElementById('fireworks');
+    const ctx=canvas.getContext('2d');
+    function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+    window.addEventListener('resize',resize);resize();
+    const particles=[];
+    function createFirework(x,y){
+        for(let i=0;i<50;i++)particles.push({x,y,vx:(Math.random()-0.5)*5,vy:(Math.random()-0.5)*5,alpha:1,color:`hsl(${Math.random()*360},80%,60%)`});
+    }
+    document.addEventListener('click',e=>createFirework(e.clientX,e.clientY));
+    function animate(){
+        ctx.fillStyle='rgba(0,0,0,0.1)';
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        for(let i=particles.length-1;i>=0;i--){
+            const p=particles[i];
+            p.x+=p.vx;p.y+=p.vy;p.alpha-=0.015;
+            if(p.alpha<=0){particles.splice(i,1);continue;}
+            ctx.fillStyle=p.color;ctx.globalAlpha=p.alpha;ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill();
+        }
+        ctx.globalAlpha=1;requestAnimationFrame(animate);
+    }
+    animate();
+</script>
+</body>
+</html>
