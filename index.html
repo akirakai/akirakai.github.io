@@ -3,84 +3,392 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>520 Love Maggie</title>
+    <title>我们的一点一滴 - Godel & Maggie</title>
     <style>
-        html,body{
-            height:100%;
-            margin:0;
-            padding:0;
-            overflow:hidden;
-            font-family:"PingFang SC","Microsoft Yahei",sans-serif;
-            background:linear-gradient(#fefcea,#f1daff);
-            color:#333;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        #container{position:relative;height:100%;width:100%;overflow:hidden;}
-        .rainbow{
-            position:absolute;
-            top:5vh;
-            left:50%;
-            width:80vw;
-            height:20vh;
-            transform:translateX(-50%);
-            background:linear-gradient(to right,red,orange,yellow,green,cyan,blue,violet);
-            border-radius:50% 50% 0 0;
-            animation:float 3s ease-in-out infinite alternate;
+        body {
+            font-family: "PingFang SC", "Microsoft Yahei", sans-serif;
+            background: #faf8f1;
+            color: #333;
+            padding: 20px;
         }
-        @keyframes float{from{transform:translate(-50%,0);}to{transform:translate(-50%,-2vh);}}
-        .message{
-            position:absolute;
-            top:40vh;
-            width:100%;
-            text-align:center;
-            font-size:4vw;
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 20px 0;
         }
-        .rose{
-            position:fixed;
-            font-size:2rem;
-            pointer-events:none;
-            animation:fall 8s linear infinite;
+        .header h1 {
+            font-size: 2.5rem;
+            color: #ff7e74;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
         }
-        @keyframes fall{0%{transform:translateY(-10vh) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(360deg);opacity:0;}}
-        canvas{position:absolute;top:0;left:0;}
-        @media (min-width:768px){.message{font-size:40px;}.rose{font-size:30px;}}
+        .header h1:after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 10%;
+            width: 80%;
+            height: 10px;
+            background: rgba(255, 214, 101, 0.5);
+            z-index: -1;
+            border-radius: 5px;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            color: #888;
+            font-weight: normal;
+        }
+        .sticky-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .sticky-note {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+        .sticky-note:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        .sticky-yellow { background-color: #fff9de; }
+        .sticky-pink { background-color: #ffeef2; }
+        .sticky-blue { background-color: #e8f4ff; }
+        .sticky-green { background-color: #e8ffea; }
+        .sticky-purple { background-color: #f4eaff; }
+        .sticky-note .date {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 10px;
+        }
+        .sticky-note .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .sticky-note .content {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .sticky-note .image-container {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+        .sticky-note .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .sticky-note:nth-child(2) .image-container img {
+            object-position: center 33%;
+        }
+        .sticky-note:last-child .image-container img {
+            object-position: center top;
+        }
+        .sticky-note:hover .image-container img {
+            transform: scale(1.05);
+        }
+        .icon {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            font-size: 2rem;
+        }
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .heart {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: float 10s linear infinite;
+            opacity: 0.5;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-10vh) translateX(20vw) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .music-control:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        .music-control .icon {
+            position: static;
+            font-size: 1.5rem;
+            color: #ff7e74;
+        }
+        .music-control.playing .pause-icon {
+            display: block;
+        }
+        .music-control.playing .play-icon {
+            display: none;
+        }
+        .music-control:not(.playing) .pause-icon {
+            display: none;
+        }
+        .music-control:not(.playing) .play-icon {
+            display: block;
+        }
+        @media (max-width: 768px) {
+            .sticky-container {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 20px;
+            }
+            .header h1 {
+                font-size: 2rem;
+            }
+            .sticky-note .image-container {
+                height: 150px;
+            }
+        }
     </style>
 </head>
 <body>
-<div id="container">
-    <div class="rainbow"></div>
-    <div class="message">Maggie，Godel爱你，Lucky也爱你！</div>
-    <canvas id="fireworks"></canvas>
-</div>
-<script>
-    for(let i=0;i<20;i++){
-        const r=document.createElement('div');
-        r.className='rose';
-        r.textContent='🌹';
-        r.style.left=Math.random()*100+'vw';
-        r.style.animationDelay=Math.random()*5+'s';
-        document.body.appendChild(r);
-    }
-    const canvas=document.getElementById('fireworks');
-    const ctx=canvas.getContext('2d');
-    function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
-    window.addEventListener('resize',resize);resize();
-    const particles=[];
-    function createFirework(x,y){
-        for(let i=0;i<50;i++)particles.push({x,y,vx:(Math.random()-0.5)*5,vy:(Math.random()-0.5)*5,alpha:1,color:`hsl(${Math.random()*360},80%,60%)`});
-    }
-    document.addEventListener('click',e=>createFirework(e.clientX,e.clientY));
-    function animate(){
-        ctx.fillStyle='rgba(0,0,0,0.1)';
-        ctx.fillRect(0,0,canvas.width,canvas.height);
-        for(let i=particles.length-1;i>=0;i--){
-            const p=particles[i];
-            p.x+=p.vx;p.y+=p.vy;p.alpha-=0.015;
-            if(p.alpha<=0){particles.splice(i,1);continue;}
-            ctx.fillStyle=p.color;ctx.globalAlpha=p.alpha;ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill();
+    <div class="hearts" id="hearts"></div>
+    
+    <div class="header">
+        <h1>我们的一点一滴</h1>
+        <div class="subtitle">Godel & Maggie 的美好时光</div>
+    </div>
+    
+    <div class="sticky-container">
+        <!-- 2018年11月20日 -->
+        <div class="sticky-note sticky-pink">
+            <div class="date">2018年11月20日</div>
+            <div class="title">缘起</div>
+            <div class="content">这一天，我们加了微信，开始了长久的聊天...</div>
+            <div class="image-container">
+                <img src="images/第一次聊天.jpg" alt="我们的第一次聊天">
+            </div>
+            <div class="icon">💬</div>
+        </div>
+        
+        <!-- 2018年11月25日 -->
+        <div class="sticky-note sticky-blue">
+            <div class="date">2018年11月25日</div>
+            <div class="title">初见</div>
+            <div class="content">在定安路地铁站第一次见面，缘分就此开始...</div>
+            <div class="image-container">
+                <img src="images/定安路.jpg" alt="定安路地铁站初见">
+            </div>
+            <div class="icon">🚇</div>
+        </div>
+        
+        <!-- 2019年元旦 -->
+        <div class="sticky-note sticky-purple">
+            <div class="date">2019年元旦</div>
+            <div class="title">香港跨年</div>
+            <div class="content">在香港一起看烟花，许下新年的愿望...</div>
+            <div class="image-container">
+                <img src="images/香港.jpg" alt="香港跨年">
+            </div>
+            <div class="icon">🎆</div>
+        </div>
+        
+        <!-- 2019年4月 -->
+        <div class="sticky-note sticky-green">
+            <div class="date">2019年4月</div>
+            <div class="title">乌镇之旅</div>
+            <div class="content">小桥流水，古镇漫步，一起留下美好回忆...</div>
+            <div class="image-container">
+                <img src="images/乌镇2019.jpg" alt="乌镇之旅">
+            </div>
+            <div class="icon">🏮</div>
+        </div>
+        
+        <!-- 2019年五一 -->
+        <div class="sticky-note sticky-yellow">
+            <div class="date">2019年五一</div>
+            <div class="title">东极岛之旅</div>
+            <div class="content">蓝天碧海，阳光沙滩，共度美好假期...</div>
+            <div class="image-container">
+                <img src="images/东极岛.jpg" alt="东极岛之旅">
+            </div>
+            <div class="icon">🏝️</div>
+        </div>
+        
+        <!-- 2019年十一 -->
+        <div class="sticky-note sticky-blue">
+            <div class="date">2019年十一</div>
+            <div class="title">长白山 & 镜泊湖</div>
+            <div class="content">壮美山水，天池美景，北国之行...</div>
+            <div class="image-container">
+                <img src="images/镜泊湖.jpg" alt="长白山与镜泊湖之旅">
+            </div>
+            <div class="icon">⛰️</div>
+        </div>
+        
+        <!-- 2021年结婚 -->
+        <div class="sticky-note sticky-pink">
+            <div class="date">2021年</div>
+            <div class="title">携手一生</div>
+            <div class="content">这一年，我们结为夫妻，开始了新的旅程...</div>
+            <div class="image-container">
+                <img src="images/婚礼.jpg" alt="我们的婚礼">
+            </div>
+            <div class="icon">💍</div>
+        </div>
+        
+        <!-- 2023年生Lucky -->
+        <div class="sticky-note sticky-purple">
+            <div class="date">2023年</div>
+            <div class="title">迎接Lucky</div>
+            <div class="content">我们的家庭迎来了新成员，Lucky的到来让生活更加美好...</div>
+            <div class="image-container">
+                <img src="images/Lucky出生.jpg" alt="Lucky的出生">
+            </div>
+            <div class="icon">👶</div>
+        </div>
+        
+        <!-- 2025年 -->
+        <div class="sticky-note sticky-green">
+            <div class="date">2025年</div>
+            <div class="title">未来憧憬</div>
+            <div class="content">带着Lucky一起去乌镇，让美好继续...</div>
+            <div class="image-container">
+                <img src="images/2025乌镇.jpg" alt="未来乌镇之旅">
+            </div>
+            <div class="icon">🔮</div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        Godel ❤️ Maggie ❤️ Lucky | 永远的爱
+    </div>
+    
+    <!-- 背景音乐 -->
+    <audio id="bgMusic" loop>
+        <source src="music/wind.mp3" type="audio/mpeg">
+        您的浏览器不支持音频元素。
+    </audio>
+    
+    <!-- 音乐控制按钮 -->
+    <div class="music-control" id="musicControl">
+        <div class="icon play-icon">🎵</div>
+        <div class="icon pause-icon">⏸️</div>
+    </div>
+    
+    <script>
+        // 创建漂浮的小爱心
+        function createHearts() {
+            const hearts = document.getElementById('hearts');
+            const symbols = ['❤️', '💕', '💖', '💗', '💘'];
+            
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.animationDuration = `${15 + Math.random() * 20}s`;
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+                hearts.appendChild(heart);
+            }
         }
-        ctx.globalAlpha=1;requestAnimationFrame(animate);
-    }
-    animate();
-</script>
+        
+        // 随机旋转便利贴效果
+        function randomRotation() {
+            const notes = document.querySelectorAll('.sticky-note');
+            notes.forEach(note => {
+                const rotation = Math.random() * 3 - 1.5; // -1.5 to 1.5 degrees
+                note.style.transform = `rotate(${rotation}deg)`;
+            });
+        }
+        
+        // 背景音乐控制
+        function setupMusicControl() {
+            const audio = document.getElementById('bgMusic');
+            const musicControl = document.getElementById('musicControl');
+            
+            // 用户交互后自动播放音乐
+            document.addEventListener('click', function() {
+                if (audio.paused) {
+                    audio.play().then(() => {
+                        musicControl.classList.add('playing');
+                    }).catch(err => {
+                        console.log('无法自动播放音乐:', err);
+                    });
+                }
+            }, { once: true });
+            
+            // 点击控制按钮切换播放/暂停
+            musicControl.addEventListener('click', function() {
+                if (audio.paused) {
+                    audio.play();
+                    musicControl.classList.add('playing');
+                } else {
+                    audio.pause();
+                    musicControl.classList.remove('playing');
+                }
+            });
+        }
+        
+        window.addEventListener('load', () => {
+            createHearts();
+            randomRotation();
+            setupMusicControl();
+        });
+    </script>
 </body>
 </html>
