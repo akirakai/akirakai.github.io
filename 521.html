@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>521 - Our Special Day</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "PingFang SC", "Microsoft Yahei", sans-serif;
+            background: #faf8f1;
+            color: #333;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 20px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            color: #ff7e74;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+        .header h1:after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 10%;
+            width: 80%;
+            height: 10px;
+            background: rgba(255, 214, 101, 0.5);
+            z-index: -1;
+            border-radius: 5px;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            color: #888;
+            font-weight: normal;
+        }
+        .sticky-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .sticky-note {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .sticky-note.animate {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .sticky-note:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        .sticky-yellow { background-color: #fff9de; }
+        .sticky-pink { background-color: #ffeef2; }
+        .sticky-blue { background-color: #e8f4ff; }
+        .sticky-green { background-color: #e8ffea; }
+        .sticky-purple { background-color: #f4eaff; }
+        .sticky-note .date {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 10px;
+        }
+        .sticky-note .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .sticky-note .content {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .sticky-note .image-container {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+        .sticky-note .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .sticky-note:nth-child(2) .image-container img {
+            object-position: center 33%;
+        }
+        .sticky-note:last-child .image-container img {
+            object-position: center top;
+        }
+        .sticky-note:hover .image-container img {
+            transform: scale(1.05);
+        }
+        .icon {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            font-size: 2rem;
+        }
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .heart {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: float 10s linear infinite;
+            opacity: 0.5;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-10vh) translateX(20vw) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #888;
+            font-size: 0.9rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards 2.5s;
+        }
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: scale(0.8);
+            animation: fadeIn 0.5s ease forwards 3s;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .music-control:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        .music-control .icon {
+            position: static;
+            font-size: 1.5rem;
+            color: #ff7e74;
+        }
+        .music-control.playing .pause-icon {
+            display: block;
+        }
+        .music-control.playing .play-icon {
+            display: none;
+        }
+        .music-control:not(.playing) .pause-icon {
+            display: none;
+        }
+        .music-control:not(.playing) .play-icon {
+            display: block;
+        }
+        /* 加载动画 */
+        .loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #faf8f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .loader-container.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loader {
+            width: 100px;
+            height: 100px;
+            position: relative;
+        }
+        .loader:before, .loader:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 5px solid transparent;
+            border-top-color: #ff7e74;
+        }
+        .loader:before {
+            animation: spin 1s linear infinite;
+        }
+        .loader:after {
+            border-top-color: rgba(255, 214, 101, 0.8);
+            animation: spin 0.5s linear infinite reverse;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .navigation-controls {
+            text-align: center;
+            margin-top: 20px;
+            opacity: 0; /* Initially hidden */
+            animation: fadeInUp 0.8s ease forwards; /* Same fade in as header */
+            animation-delay: 2.5s; /* Delay to appear after the first note is potentially read */
+        }
+
+        .nav-button {
+            background-color: #ff7e74;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: background-color 0.3s ease;
+        }
+        .nav-button:hover {
+            background-color: #ff6358;
+        }
+        .nav-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .sticky-container {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 20px;
+            }
+            .header h1 {
+                font-size: 2rem;
+            }
+            .sticky-note .image-container {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader-container" id="loader">
+        <div class="loader"></div>
+    </div>
+
+    <div class="hearts" id="hearts"></div>
+    
+    <div class="header">
+        <h1>521</h1>
+        <div class="subtitle">A Special Day, A Special Memory</div>
+    </div>
+    
+    <div class="sticky-container">
+        <div class="sticky-note sticky-pink" style="display: none;">
+            <div class="date">Step 1</div>
+            <div class="title">Our Journey</div>
+            <div class="content">Every moment with you is special.</div>
+            <div class="icon">💖</div>
+        </div>
+        <div class="sticky-note sticky-blue" style="display: none;">
+            <div class="date">Step 2</div>
+            <div class="title">The Magic of 521</div>
+            <div class="content">Today, we celebrate our unique bond.</div>
+            <div class="icon">✨</div>
+        </div>
+        <div class="sticky-note sticky-green" style="display: none;">
+            <div class="date">Step 3</div>
+            <div class="title">Forever & Always</div>
+            <div class="content">Looking forward to many more memories.</div>
+            <div class="icon">💌</div>
+        </div>
+    </div>
+
+    <div class="navigation-controls">
+        <button id="prevButton" class="nav-button">Previous</button>
+        <button id="nextButton" class="nav-button">Next</button>
+    </div>
+    
+    <div class="footer">
+        Godel ❤️ Maggie ❤️ Lucky | 永远的爱
+    </div>
+    
+    <!-- 背景音乐 -->
+    <audio id="bgMusic" loop>
+        <source src="music/wind.mp3" type="audio/mpeg">
+        您的浏览器不支持音频元素。
+    </audio>
+    
+    <!-- 音乐控制按钮 -->
+    <div class="music-control" id="musicControl">
+        <div class="icon play-icon">🎵</div>
+        <div class="icon pause-icon">⏸️</div>
+    </div>
+    
+    <script>
+        let currentNoteIndex = 0;
+        let notes;
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+
+        // 创建漂浮的小爱心
+        function createHearts() {
+            const hearts = document.getElementById('hearts');
+            const symbols = ['❤️', '💕', '💖', '💗', '💘'];
+            
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.animationDuration = `${15 + Math.random() * 20}s`;
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+                hearts.appendChild(heart);
+            }
+        }
+        
+        // 随机旋转便利贴效果
+        function randomRotation() {
+            const notes = document.querySelectorAll('.sticky-note');
+            notes.forEach(note => {
+                const rotation = Math.random() * 3 - 1.5; // -1.5 to 1.5 degrees
+                note.style.transform = `rotate(${rotation}deg)`;
+            });
+        }
+        
+        // 背景音乐控制
+        function setupMusicControl() {
+            const audio = document.getElementById('bgMusic');
+            const musicControl = document.getElementById('musicControl');
+            
+            // 用户交互后自动播放音乐
+            document.addEventListener('click', function() {
+                if (audio.paused) {
+                    audio.play().then(() => {
+                        musicControl.classList.add('playing');
+                    }).catch(err => {
+                        console.log('无法自动播放音乐:', err);
+                    });
+                }
+            }, { once: true });
+            
+            // 点击控制按钮切换播放/暂停
+            musicControl.addEventListener('click', function() {
+                if (audio.paused) {
+                    audio.play();
+                    musicControl.classList.add('playing');
+                } else {
+                    audio.pause();
+                    musicControl.classList.remove('playing');
+                }
+            });
+        }
+
+        function showNote(index) {
+            notes.forEach(note => {
+                note.style.display = 'none';
+                note.classList.remove('animate');
+            });
+
+            if (index >= 0 && index < notes.length) {
+                notes[index].style.display = 'flex'; // Assuming flex is used for layout
+                notes[index].classList.add('animate');
+                currentNoteIndex = index;
+            }
+            updateButtonStates(); // Update buttons every time a note is shown
+        }
+
+        function updateButtonStates() {
+            if (!notes) return; // Ensure notes is initialized
+            prevButton.disabled = currentNoteIndex === 0;
+            nextButton.disabled = currentNoteIndex === notes.length - 1;
+        }
+        
+        // 加载动画和便利贴逐个显示
+        function setupAnimations() {
+            notes = document.querySelectorAll('.sticky-note');
+            // 加载动画
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.classList.add('hide');
+            }, 1500);
+            
+            // Show the first note
+            showNote(0);
+            updateButtonStates(); // Set initial button states
+        }
+
+        nextButton.addEventListener('click', () => {
+            if (currentNoteIndex < notes.length - 1) {
+                showNote(currentNoteIndex + 1);
+            }
+        });
+
+        prevButton.addEventListener('click', () => {
+            if (currentNoteIndex > 0) {
+                showNote(currentNoteIndex - 1);
+            }
+        });
+        
+        window.addEventListener('load', () => {
+            createHearts();
+            setupAnimations();
+            setupMusicControl();
+            
+            // randomRotation(); // Removed as per instructions
+        });
+    </script>
+</body>
+</html>
